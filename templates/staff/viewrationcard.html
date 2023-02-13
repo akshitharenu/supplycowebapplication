@@ -1,0 +1,147 @@
+ <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Card | Html/Css</title>
+    <style>
+      body {
+    background-color: #B77AD7;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 750px;
+    margin: 0 auto;
+    border-radius: 10px;
+    background-color: #ecc7ff;
+    box-shadow: 0px 14px 32px 0px rgba(0, 0, 0, 0.15);
+    margin-top:20px;
+}
+
+.product-img {
+    width: 327px;
+}
+
+.product-img img {
+    width: 327px;
+    object-fit: cover;
+    border-radius: 10px 0 0 10px;
+}
+
+.product-desc {
+    padding-right: 30px;
+    padding-left: 30px;
+    background-color: transparent;
+}
+
+.product-text h1 {
+    font-size: 34px;
+    line-height: 42px;
+    color: #474747;
+    margin-bottom: 0;
+}
+
+.product-text h1,
+.product-price-btn p {
+    font-family: 'Bentham', serif;
+}
+
+.product-text h2 {
+    font-size: 17px;
+    line-height: 25px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: #505050;
+    letter-spacing: 3px;
+    margin-top: 0;
+}
+
+.product-text p {
+    font-family: 'Playfair Display', serif;
+    color: #474747;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.product-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-price p {
+    font-family: 'Trocchi', serif;
+    font-size: 28px;
+    color: #474747;
+    margin: 0;
+}
+
+.product-price button {
+    padding: 10px 30px;
+    border-radius: 6px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #474747;
+    background-color: transparent;
+    cursor: pointer;
+    border: 1px solid #B77AD7;
+    transition: .5s;
+}
+
+.product-price button:hover {
+    background-color: #B77AD7;
+    color: #ecc7ff;
+}
+
+@media (max-width: 720px) {
+    .container {
+        max-width: 650px;
+        flex-direction: column;
+    }
+
+    .product-img img {
+        border-radius: 0;
+    }
+
+    .product-desc {
+        padding-bottom: 30px;
+    }
+}
+    </style>
+  </head>
+  <body>
+  {% block content %}
+
+  <center><h1>RATION CARD DETAILS</h1></center>
+    {% for Customerdetails in ration %}
+    <div class="container">
+
+      {% if Customerdetails.rationcardphoto %}
+      <div class="product-img">
+        <img src="{{Address.rationcardphoto.url}}" alt=""/>
+        {% endif %}
+
+      </div>
+      <div class="product-desc">
+        <div class="product-text">
+          <h1>{{Customerdetails.user}}</h1>
+          <h2>{{Customerdetails.email}}</h2>
+          <center><h1>Rationcard No</h1></center>
+          <h2>{{Customerdetails.rationcardno}}</h2>
+          <a href="{% url 'store:inform' %}"><button type="submit">Inform</button></a>
+        </div>
+
+
+      </div>
+    </div>
+     {% endfor %}
+  {% endblock %}
+  </body>
+</html>

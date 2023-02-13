@@ -1,0 +1,284 @@
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap');
+* {
+	font-family: 'Quicksand', sans-serif;
+}
+
+body {
+	margin: 0;
+
+	display: flex;
+	justify-content: center;
+
+	background-color: #16181A;
+	overflow-x: hidden;
+}
+
+.supaviews,
+.supaview,
+.supaerror {
+	border-radius: 10px;
+}
+
+.supaviews {
+	position: relative;
+	width: 500px;
+	margin: 125px 0 50px 0;
+	color: #FFFFFF;
+	background-color: #1C1E20;
+
+	&__logo {
+		position: absolute;
+		width: 200px;
+		right: -55px;
+		top: -100px;
+		transition: 0.2s ease-in-out;
+
+		&:hover {
+			transform: scale(1.1);
+		}
+	}
+
+	&__gradient {
+		position: absolute;
+		right: 50px;
+		top: 0;
+		z-index: -1;
+
+		display: block;
+		height: 1100px;
+		width: 1100px;
+		transform: translate(50%, -50%);
+		background-image: radial-gradient(rgba(#6ECB90, 0.2) 15%, #16181A 60%);
+	}
+}
+
+.supaview,
+.supaerror{
+	margin: 20px;
+	padding: 25px;
+}
+
+.supaview {
+	background-color: #24262B;
+
+	&__stars {
+		margin-bottom: 15px;
+		font-size: 25px;
+		color: #1C1E20;
+
+		.checked {
+			color: #6ECB90;
+			text-shadow: 0 0 6px #4DA76EBD;
+		}
+	}
+
+	&__name {
+		font-weight: 700;
+		font-size: 20px;
+	}
+
+	&__date {
+		margin-top: 15px;
+		color: #7D7F81;
+	}
+
+	&__rating {
+		display: block;
+		float: left;
+		padding: 0;
+		margin-bottom: 15px;
+		border: none;
+
+		& > input { display: none; }
+		& > label:before {
+			display: inline-block;
+			margin-right: 5px;
+
+			font-family: "Font Awesome 5 Free";
+			font-size: 25px;
+			font-weight: 900;
+			content: "\f005";
+		}
+
+		& > label {
+			float: right;
+			color: #1C1E20;
+			cursor: pointer;
+			transition: 0.15s ease-in-out;
+		}
+
+		& > input:checked ~ label,
+		&:not(:checked) > label:hover,
+		&:not(:checked) > label:hover ~ label {
+			color: #6ECB90;
+			text-shadow: 0 0 6px #4DA76EBD;
+		}
+
+		& > input:checked + label:hover,
+		& > input:checked ~ label:hover,
+		& > label:hover ~ input:checked ~ label,
+		& > input:checked ~ label:hover ~ label {
+			color: #4DA76EBD;
+		}
+	}
+
+	&__title {
+		margin-top: 0;
+	}
+
+	&__copy {
+		input, textarea {
+			width: calc(100% - 20px);
+			padding: 10px;
+			margin-bottom: 10px;
+			border-radius: 5px;
+			border: 1px solid #16181A;
+			color: #FFFFFF;
+			background-color: transparent;
+			outline: none;
+
+			&:focus {
+				border: 1px solid #FFFFFF;
+			}
+		}
+	}
+
+	&__submit {
+		padding: 10px 15px;
+		font-weight: 700;
+		color: #FFFFFF;
+		background-color: #64B883;
+		border: none;
+		border-radius: 20px;
+		cursor: pointer;
+		outline: none;
+		transition: 0.2s ease-in-out;
+
+		&:hover {
+			background-color: #6ECB90;
+		}
+	}
+}
+
+.supaerror {
+	background-color: #E56460;
+}
+</style>
+<div class="supaviews">
+	<img class="supaviews__logo" src="https://app.supabase.io/img/supabase-logo.svg"/>
+	<div class="supaviews__gradient"></div>
+	<div class="supaviews__add">
+		<div class="supaview">
+			<h1 class="supaview__title">Add a new review</h1>
+			<form id="review" method="POST">
+				{% csrf_token %}
+				 {{form.as_p}}
+
+
+				<button class="supaview__submit">Submit review</button>
+			</form>
+		</div>
+	</div>
+	<div class="supaviews__list">
+		<div class="supaview">you can review our products</div>
+	</div>
+</div>
+
+
+<script>
+
+        // Supabase import
+import { createClient } from "https://jspm.dev/@supabase/supabase-js";
+
+// Supabase initialization
+const supaURL = "";
+const supaKEY = "";
+const supabase = createClient(supaURL, supaKEY);
+
+/*
+Supabase Database structure
+	table name: supaviews
+	id: int4, primary key, created with the table
+	name: varchar, required
+	message: text, required
+	rate: int4, required
+	created: date, required, default value now()
+*/
+
+// Supaviews implementation
+const reviewsEl = document.querySelector(".supaviews__list");
+
+function renderError(error) {
+	console.warn(error);
+	reviewsEl.innerHTML = `<div class="supaerror">${error}</div>`;
+}
+
+function renderStars(rate) {
+	let rating = "";
+	for (let i = 0; i < 5; i++) {
+		rating += `<i class="fas fa-star ${i < rate ? "checked" : ""}"></i>`;
+	}
+	return rating;
+}
+
+function renderReview(review) {
+	const { name, message, created } = review;
+	const stars = renderStars(review.rate);
+
+	const element = document.createElement("DIV");
+	element.classList.add("supaview");
+	element.innerHTML = `
+		<div class="supaview__stars">${stars}</div>
+		<div class="supaview__name">${name}</div>
+		<div class="supaview__message">${message}</div>
+		<div class="supaview__date">${created}</div>
+	`;
+
+	return element;
+}
+
+async function renderReviews() {
+	// GET all reviews
+	const { data: supaviews, error } = await supabase
+		.from("supaviews")
+		.select("*");
+
+	if (error) {
+		renderError(`ERROR: ${error.message}`);
+		return;
+	}
+
+	reviewsEl.innerHTML = "";
+	supaviews.forEach((supaview) => {
+		reviewsEl.prepend(renderReview(supaview));
+	});
+}
+
+function handleForm() {
+	const form = document.getElementById("review");
+	const obj = {};
+	form.addEventListener("submit", async (e) => {
+		e.preventDefault();
+
+		const formData = new FormData(form);
+		for (let key of formData.keys()) {
+			obj[key] = formData.get(key);
+		}
+
+		// INSERT a new review
+		const { error } = await supabase.from("supaviews").insert([obj]);
+		if (error) {
+			renderError(`ERROR: ${error.message}`);
+			return;
+		}
+
+		form.reset();
+		renderReviews();
+	});
+}
+
+renderReviews();
+handleForm();
+    </script>
+

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+{% block content %}
+<body>
+
+
+<section class="pt-5">
+          <header class="text-center">
+            <p class="small text-muted small text-uppercase mb-1">Subseedy Categories</p>
+            <h2 class="h5 text-uppercase mb-4">Our categories</h2>
+          </header>
+          <div class="row">
+
+
+         {% for cate in cat %}
+
+              <div class="col-md-4 mb-4 mb-md-5">
+
+                <a class="category-item" href="{% url 'store:category-products' cate.slug %}">
+                  {% if cate.category_image %}
+                    <img class="img-fluid" src="{{ cate.category_image.url }}" alt="{{ cate.title }}">
+
+                  {% endif %}
+                  <strong class="category-item-title">{{ cate.title }}</strong>
+
+
+                </a>
+              </div>
+
+            {% endfor %}
+
+          </div>
+        </section>
+</body>
+{% endblock %}
+</html>
+

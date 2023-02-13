@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{
+background-image: linear-gradient(
+  45deg,
+  hsl(68deg 100% 20%) 0%,
+  hsl(67deg 82% 25%) 11%,
+  hsl(66deg 70% 29%) 22%,
+  hsl(64deg 63% 34%) 33%,
+  hsl(63deg 57% 39%) 44%,
+  hsl(61deg 53% 43%) 56%,
+  hsl(59deg 50% 48%) 67%,
+  hsl(58deg 54% 53%) 78%,
+  hsl(56deg 65% 58%) 89%,
+  hsl(55deg 79% 64%) 100%
+);
+}
+
+#customers {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+}
+</style>
+</head>
+<body>
+
+<center><h1>View Order</h1></center>
+
+<table id="customers">
+  <tr>
+    <th>product</th>
+    <th>quantity</th>
+    <th>price</th>
+  </tr>
+
+{% if all_orders %}
+{% for Orderdetail in all_orders %}
+  <tr>
+
+    <td>{{Orderdetail.product_name}}</td>
+    <td>{{Orderdetail.quantity}}</td>
+    <td>{{Orderdetail.price}}</td>
+  </tr>
+
+
+{% endfor %}
+  {% endif %}
+
+</table>
+
+</body>
+</html>
+
+
